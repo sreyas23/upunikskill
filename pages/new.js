@@ -32,7 +32,7 @@ export default function NewTask() {
     <div className="max-w-md mx-auto p-4">
       <Link
         href="/"
-        className="mb-4 inline-block text-blue-600 hover:underline"
+        className="mb-4 inline-block text-orange-600 hover:underline"
       >
         Home
       </Link>
