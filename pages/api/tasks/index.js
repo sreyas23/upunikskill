@@ -1,11 +1,9 @@
-// pages/api/tasks/index.js
-import { tasks } from '../../../data.js';  // Adjust the relative path as needed
+import { tasks } from '../../../data.js'; 
 
 export default function handler(req, res) {
   const { method } = req;
   switch (method) {
     case "GET":
-      // Return all tasks
       return res.status(200).json(tasks);
     case "POST":
       const { title, description, done } = req.body;

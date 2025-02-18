@@ -1,65 +1,84 @@
-// pages/new.js
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 export default function NewTask() {
+  const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const router = useRouter();
+  const [dueDate, setDueDate] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title) {
-      alert("Please provide a title for the task.");
+      alert("Title is required.");
       return;
     }
     try {
-      await fetch("/api/tasks", {
+      const res = await fetch("/api/tasks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description, done: false }),
+        body: JSON.stringify({ title, description, dueDate, done: false }),
       });
+      if (!res.ok) throw new Error("Failed to create task");
       router.push("/");
     } catch (error) {
       console.error(error);
+      alert("Error creating task");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-6 rounded shadow">
+    <div className="max-w-md mx-auto p-4">
+      <Link
+        href="/"
+        className="mb-4 inline-block text-blue-600 hover:underline"
+      >
+        Home
+      </Link>
       <h2 className="text-2xl font-bold mb-4">Create New Task</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="title" className="block font-medium mb-1">
+          <label htmlFor="title" className="block mb-1 font-medium">
             Title
           </label>
           <input
             id="title"
-            className="w-full px-3 py-2 border rounded"
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g. Buy groceries"
+            className="w-full border rounded px-3 py-2"
           />
         </div>
         <div>
-          <label htmlFor="description" className="block font-medium mb-1">
+          <label htmlFor="description" className="block mb-1 font-medium">
             Description
           </label>
           <textarea
             id="description"
-            className="w-full px-3 py-2 border rounded"
-            rows="3"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="e.g. Milk, Eggs, Bread"
+            className="w-full border rounded px-3 py-2"
+            rows="3"
+          ></textarea>
+        </div>
+        <div>
+          <label htmlFor="dueDate" className="block mb-1 font-medium">
+            Due Date
+          </label>
+          <input
+            id="dueDate"
+            type="datetime-local"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            className="w-full border rounded px-3 py-2"
           />
         </div>
         <button
           type="submit"
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded"
         >
-          Create
+          Create Task
         </button>
       </form>
     </div>
